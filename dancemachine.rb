@@ -17,13 +17,11 @@ module DanceMachine
       send_data "#{ cmd.flatten.join(' ') }\r\n"
     end
 
-    def post_init
-      EM.add_timer(3) do
-        puts "sending data"
-        command "USER", [config.nick]*4
-        command "NICK", "#{config.nick}"
-        command "JOIN", "##{ config.channel }"
-      end
+    def connection_completed
+      puts "sending data"
+      command "USER", [config.nick]*4
+      command "NICK", "#{config.nick}"
+      command "JOIN", "##{ config.channel }"
     end
 
     def receive_line(line)
