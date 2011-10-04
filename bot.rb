@@ -4,8 +4,7 @@ require 'eventmachine'
 require 'ostruct'
 require './dancemachine'
 
-
-config = {
+options = {
     secret: 'honk',
     server: 'irc.freenode.net',
     channel: '2legit2commit',
@@ -13,4 +12,4 @@ config = {
     port: '6667',
   }
 
-DanceMachine::Bot.go(config)
+DanceMachine::Bot.go(options)
