@@ -17,6 +17,10 @@ module DanceMachine
       send_data "#{ cmd.flatten.join(' ') }\r\n"
     end
 
+    def say(*text)
+      command "PRIVMSG", "##{ config.channel }", "#{text.flatten.join(' ')}"
+    end
+
     def connection_completed
       puts "sending data"
       command "USER", [config.nick]*4
@@ -25,10 +29,8 @@ module DanceMachine
     end
 
     def receive_line(line)
-      case line
-        when /^PING (.*)/ then command('PONG', $1)
-        else puts line;
-      end
+       puts line
+       command('PONG', $1) if line =~ /^PING (.*)/
     end
 
     def unbind
@@ -41,8 +43,11 @@ module DanceMachine
   
   class Bot
     def self.go(options)
-      EventMachine::run do
-        DanceMachine::IRC.connect(options)
+      EM::run do
+        bot = DanceMachine::IRC.connect(options)
+        EM.add_timer(15) do
+          bot.say("honk")
+        end
       end
     end
   end
